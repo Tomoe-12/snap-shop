@@ -1,5 +1,4 @@
 import {
-  boolean,
   timestamp,
   pgTable,
   text,
