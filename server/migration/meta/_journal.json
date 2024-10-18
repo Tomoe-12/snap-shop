@@ -8,6 +8,13 @@
       "when": 1729066422165,
       "tag": "0000_loving_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1729223368023,
+      "tag": "0001_material_red_wolf",
+      "breakpoints": true
     }
   ]
 }
