@@ -5,7 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/type/login-schema";
+import { loginSchema } from "@/types/login-schema";
 import {
   Form,
   FormControl,
@@ -40,40 +40,44 @@ const Login = () => {
         showProvider
       >
         <Form {...form}>
-          <div className="space-y-3">
-            <FormField
-              name="email"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="snapLikeADoo@gmail.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="password"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="******" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-3">
+              <FormField
+                name="email"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="snapLikeADoo@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="password"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="******" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Button variant={"link"} size={'sm'} className="pl-0 mb-1" >
-              <Link href={"/auth/reset"}>Forget Password</Link>
+              <Button variant={"link"} size={"sm"} className="pl-0 mb-1">
+                <Link href={"/auth/reset"}>Forget Password</Link>
+              </Button>
+            </div>
+
+            <Button type="submit" className="w-full mb-4">
+              Login
             </Button>
-          </div>
-
-          <Button className="w-full mb-4">Login</Button>
+          </form>
         </Form>
       </AuthForm>
     </div>
