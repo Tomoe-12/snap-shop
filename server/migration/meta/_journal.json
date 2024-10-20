@@ -15,6 +15,13 @@
       "when": 1729223368023,
       "tag": "0001_material_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729452485102,
+      "tag": "0002_ambitious_dreadnoughts",
+      "breakpoints": true
     }
   ]
 }
