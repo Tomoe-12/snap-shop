@@ -33,8 +33,8 @@ const Login = () => {
   const { execute, status } = useAction(login);
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    const {email,password,} = values
-    execute({email,password})
+    const { email, password } = values;
+    execute({ email, password });
   };
 
   return (
@@ -86,6 +86,7 @@ const Login = () => {
                 "w-full my-4",
                 status === "executing" && "animate-pulse"
               )}
+              disabled={status === "executing"}
             >
               Login
             </Button>
