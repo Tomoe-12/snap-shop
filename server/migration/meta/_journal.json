@@ -22,6 +22,13 @@
       "when": 1729452485102,
       "tag": "0002_ambitious_dreadnoughts",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1730522724196,
+      "tag": "0003_dark_silvermane",
+      "breakpoints": true
     }
   ]
 }

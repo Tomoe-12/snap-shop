@@ -62,3 +62,18 @@ export const emailVerificationToken = pgTable(
     compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
   })
 );
+
+export const resetPasswordVerificationToken = pgTable(
+  "reset_password_token",
+  {
+    id: text("id")
+      .notNull()
+      .$default(() => createId()),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+    email: text("email").notNull(),
+  },
+  (vt) => ({
+    compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
+  })
+);
