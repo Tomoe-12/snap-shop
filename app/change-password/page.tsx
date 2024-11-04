@@ -21,41 +21,38 @@ import * as z from "zod";
 import { register } from "@/server/actions/register-action";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import { resetPasswordSchema } from "@/types/reset-password-schema";
-import { resetPassword } from "@/server/actions/reset-password";
+import { redirect, useSearchParams } from "next/navigation";
+import { changePasswordSchema } from "@/types/change-password-schema";
+import { changePassword } from "@/server/actions/change-password";
 
-const ResetPassword = () => {
-  const form = useForm<z.infer<typeof resetPasswordSchema>>({
-    resolver: zodResolver(resetPasswordSchema),
+const ChangePassword = () => {
+  const form = useForm<z.infer<typeof changePasswordSchema>>({
+    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
     },
   });
 
-  const { execute, status, result } = useAction(resetPassword, {
+  const searchParam = useSearchParams();
+  const token = searchParam.get("token");
+
+  const { execute, status, result } = useAction(changePassword, {
     onSuccess({ data }) {
       form.reset();
       if (data?.error) {
         toast.error(data?.error);
       }
       if (data?.success) {
-        toast.success(data?.success, {
-          action: {
-            label: "Open Gmail",
-            onClick: () => {
-              window.open("https://mail.google.com", "_blank");
-            },
-          },
-        });
+        toast.success(data?.success);
       }
     },
   });
 
-  const onSubmit = (values: z.infer<typeof resetPasswordSchema>) => {
-    const { email } = values;
+  const onSubmit = (values: z.infer<typeof changePasswordSchema>) => {
+    const { password } = values;
     execute({
-      email,
+      password,
+      token,
     });
   };
 
@@ -65,19 +62,19 @@ const ResetPassword = () => {
         footerLabel="Already have an account ?"
         showProvider={false}
         footerHerf="/auth/login"
-        formTitle="Reset your Password"
+        formTitle="Change your Password"
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-3">
               <FormField
-                name="email"
+                name="password"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Neww Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="snapLikeADoo@gmail.com" {...field} disabled={status === "executing"} />
+                      <Input placeholder="******" {...field} type="password" disabled={status === "executing"} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -92,7 +89,7 @@ const ResetPassword = () => {
               )}
               disabled={status === "executing"}
             >
-              Reset Password
+              Change Password
             </Button>
           </form>
         </Form>
@@ -101,4 +98,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ChangePassword;

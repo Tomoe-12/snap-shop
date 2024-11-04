@@ -38,6 +38,7 @@ const Login = () => {
         toast.error(data?.error);
       }
       if (data?.success) {
+        console.log('come in data.success');
         toast.success(data?.success);
       }
     },
