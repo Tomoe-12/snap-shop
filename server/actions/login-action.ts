@@ -1,4 +1,4 @@
-"use server";
+"use server"
 
 import { loginSchema } from "@/types/login-schema";
 import { actionClient } from "./safe-action";
@@ -14,7 +14,7 @@ export const login = actionClient
   .schema(loginSchema)
   .action(async ({ parsedInput: { email, password } }) => {
     try {
-      // check email  
+      // check email
       const existingUser = await db.query.users.findFirst({
         where: eq(users.email, email),
       });
@@ -36,14 +36,18 @@ export const login = actionClient
         );
         return { success: "Email verification resent." };
       }
+      console.log("enter sign in");
 
-       await signIn("credentials", {
+      const result = await signIn("credentials", {
         email,
         password,
-        redirectTo: "/",
+        redirect: false,
       });
 
-      return { success: "Login Successfully " };
+      if (result?.error)
+        return { error: "Please provide valid credentials" };
+
+      return { success: "Login successful", redirectTo: "/" };
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {
