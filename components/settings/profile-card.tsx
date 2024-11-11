@@ -1,24 +1,39 @@
+"use client";
+
 import { Session } from "next-auth";
-import React from "react";
+import React, { useState } from "react";
 import SettingsCard from "./settings-card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { UserRoundPen } from "lucide-react";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-
+import useMediaQuery from "@/hooks/useMediaQuery";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 type ProfileCardProps = {
   session: Session;
 };
 
 const ProfileCard = ({ session }: ProfileCardProps) => {
-  console.log(session);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [open, setOpen] = useState(false);
 
   return (
     <SettingsCard>
@@ -38,21 +53,49 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
           </div>
         </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <UserRoundPen
-              size={24}
-              className="text-muted-foreground hover:text-black cursor-pointer"
-            />
-          </DialogTrigger>
-          <DialogContent className="mx-4 lg:mx-0">
-            <DialogHeader>
-              <DialogTitle>Want to update your profile? </DialogTitle>
-              <input type="text" className="w-full my-6" />
-              <Button>Save Changes</Button>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        {isDesktop ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <UserRoundPen
+                size={24}
+                className="text-muted-foreground hover:text-black cursor-pointer"
+              />
+            </DialogTrigger>
+            <DialogContent className="mx-4 lg:mx-0">
+              <DialogHeader>
+                <DialogTitle>Edit Profile </DialogTitle>
+                <DialogDescription>
+                  This will be your public display name.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant={"outline"}>Close</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>
+              <UserRoundPen
+                size={24}
+                className="text-muted-foreground hover:text-black cursor-pointer"
+              />
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit Profile</DrawerTitle>
+                <DrawerDescription>
+                  This will be your public display name.
+                </DrawerDescription>
+                <input type="text" className="w-full " />
+                <Button>Save Changes</Button>
+              </DrawerHeader>
+              <DrawerFooter></DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        )}
       </div>
     </SettingsCard>
   );
