@@ -27,6 +27,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import ProfileForm from "./profile-form";
 type ProfileCardProps = {
   session: Session;
 };
@@ -68,11 +69,15 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                   This will be your public display name.
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant={"outline"}>Close</Button>
-                </DialogClose>
-              </DialogFooter>
+              <ProfileForm
+                name={session?.user?.name!}
+                email={session?.user?.email!}
+              />
+              <DialogClose asChild>
+                <Button variant={"outline"} className="w-full">
+                  Cancel
+                </Button>
+              </DialogClose>
             </DialogContent>
           </Dialog>
         ) : (
@@ -89,10 +94,18 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 <DrawerDescription>
                   This will be your public display name.
                 </DrawerDescription>
-                <input type="text" className="w-full " />
-                <Button>Save Changes</Button>
               </DrawerHeader>
-              <DrawerFooter></DrawerFooter>
+              <ProfileForm
+                name={session?.user?.name!}
+                email={session?.user?.email!}
+              />
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button variant={"outline"} className="w-full">
+                    Cancel
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         )}
