@@ -36,6 +36,10 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
 
+  const handleSetOpen = () => {
+    setOpen(false);
+  };
+
   return (
     <SettingsCard>
       <div className="flex items-start justify-between">
@@ -55,7 +59,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
         </div>
 
         {isDesktop ? (
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <UserRoundPen
                 size={24}
@@ -70,6 +74,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 </DialogDescription>
               </DialogHeader>
               <ProfileForm
+                handleSetOpen={handleSetOpen}
                 name={session?.user?.name!}
                 email={session?.user?.email!}
               />
@@ -96,6 +101,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 </DrawerDescription>
               </DrawerHeader>
               <ProfileForm
+                handleSetOpen={handleSetOpen}
                 name={session?.user?.name!}
                 email={session?.user?.email!}
               />

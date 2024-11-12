@@ -22,8 +22,9 @@ import { cn } from "@/lib/utils";
 type profilefileProps = {
   name: string;
   email: string;
+  handleSetOpen(): void;
 };
-const ProfileForm = ({ name, email }: profilefileProps) => {
+const ProfileForm = ({ handleSetOpen, name, email }: profilefileProps) => {
   const form = useForm<z.infer<typeof settingsSchema>>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
@@ -37,7 +38,10 @@ const ProfileForm = ({ name, email }: profilefileProps) => {
       form.reset();
       if (data?.error) toast.error(data?.error);
 
-      if (data?.success) toast.success(data?.success);
+      if (data?.success) {
+        handleSetOpen();
+        toast.success(data?.success);
+      }
     },
   });
 
@@ -62,7 +66,11 @@ const ProfileForm = ({ name, email }: profilefileProps) => {
               <FormItem>
                 <FormLabel>Display Name </FormLabel>
                 <FormControl>
-                  <Input placeholder="snapsnap" {...field} />
+                  <Input
+                    placeholder="snapsnap"
+                    {...field}
+                    disabled={status === "executing"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
