@@ -43,7 +43,7 @@ const Login = () => {
         if (data.redirectTo) {
           setTimeout(() => {
             window.location.href = data.redirectTo;
-          }, 2000); 
+          }, 1300); 
         }
       }
     },
@@ -72,7 +72,7 @@ const Login = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="snapLikeADoo@gmail.com" {...field} />
+                      <Input placeholder="snapLikeADoo@gmail.com" {...field} disabled={status === "executing"} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,7 +85,7 @@ const Login = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="******" {...field} type="password" />
+                      <Input placeholder="******" {...field} type="password"  disabled={status === "executing"} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

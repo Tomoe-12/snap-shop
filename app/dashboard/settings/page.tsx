@@ -15,10 +15,14 @@ const Settings = async () => {
   return (
     <SettingsCard title="Settings" description="Manage your account settings">
       <main className="grid  md:grid-cols-2 gap-4 pt-6 ">
-          <ProfileCard session={session} />
+        <ProfileCard session={session} />
         <div className="space-y-4">
-          <ChangePassword />
-          <TwoFactor />
+          {!session.user.isOauth && (
+            <>
+              <ChangePassword email={session.user.email!} />
+              <TwoFactor />
+            </>
+          )}
         </div>
       </main>
     </SettingsCard>

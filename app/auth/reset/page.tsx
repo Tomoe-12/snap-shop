@@ -12,16 +12,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerSchema } from "@/types/register-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { register } from "@/server/actions/register-action";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
 import { resetPasswordSchema } from "@/types/reset-password-schema";
 import { resetPassword } from "@/server/actions/reset-password";
 

@@ -10,6 +10,7 @@ import { eq } from "drizzle-orm";
 
 import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
+import { redirect } from "next/dist/server/api-utils";
 
 export const changePassword = actionClient
   .schema(changePasswordSchema)
@@ -48,6 +49,6 @@ export const changePassword = actionClient
         .delete(resetPasswordVerificationToken)
         .where(eq(resetPasswordVerificationToken.email, existingToken.email));
     });
-
+    
     return { success: "Password changed successfully" };
   });

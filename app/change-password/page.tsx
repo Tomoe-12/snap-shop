@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import { redirect, useSearchParams } from "next/navigation";
 import { changePasswordSchema } from "@/types/change-password-schema";
 import { changePassword } from "@/server/actions/change-password";
-
+import { signOut } from "next-auth/react";
 const ChangePassword = () => {
   const form = useForm<z.infer<typeof changePasswordSchema>>({
     resolver: zodResolver(changePasswordSchema),
@@ -43,6 +43,7 @@ const ChangePassword = () => {
         toast.error(data?.error);
       }
       if (data?.success) {
+        signOut({ callbackUrl: "/auth/login" });
         toast.success(data?.success);
       }
     },
@@ -74,7 +75,12 @@ const ChangePassword = () => {
                   <FormItem>
                     <FormLabel>Neww Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="******" {...field} type="password" disabled={status === "executing"} />
+                      <Input
+                        placeholder="******"
+                        {...field}
+                        type="password"
+                        disabled={status === "executing"}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
