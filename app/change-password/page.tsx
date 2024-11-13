@@ -21,7 +21,7 @@ import * as z from "zod";
 import { register } from "@/server/actions/register-action";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { changePasswordSchema } from "@/types/change-password-schema";
 import { changePassword } from "@/server/actions/change-password";
 import { signOut } from "next-auth/react";

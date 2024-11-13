@@ -12,7 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useRouter } from "next/navigation";
+
 const Userbutton = ({ user, expires }: Session) => {
+  const router = useRouter();
   console.log(user);
 
   return (
@@ -51,7 +54,10 @@ const Userbutton = ({ user, expires }: Session) => {
               />
               <span className="text-sm font-medium ">My Orders</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer group hover:bg-primary/10">
+            <DropdownMenuItem
+              className="cursor-pointer group hover:bg-primary/10"
+              onClick={() => router.push('/dashboard/settings')}
+            >
               <Settings
                 size={16}
                 className="group-hover:rotate-90 group-hover:text-primary transition-all duration-300 ease-in-out "

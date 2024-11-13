@@ -21,7 +21,6 @@ import * as z from "zod";
 import { register } from "@/server/actions/register-action";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
 
 const Register = () => {
   const form = useForm<z.infer<typeof registerSchema>>({
