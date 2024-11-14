@@ -24,6 +24,7 @@ export const resetPassword = actionClient
       return { error: "Fail to generate password reset token" };
 
     await sendPasswordResetEmail(
+      existingUser.name!,
       passwordResetToken[0].email,
       passwordResetToken[0].token
     );

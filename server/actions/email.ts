@@ -34,8 +34,9 @@ export const sendEmail = async (
 };
 
 export const sendPasswordResetEmail = async (
+  username: string,
   email: string,
-  token: string,
+  token: string
 ) => {
   const resetLink = `${currentBaseUrl}/change-password?token=${token}`;
   console.log("confirm link", resetLink);
@@ -45,8 +46,10 @@ export const sendPasswordResetEmail = async (
     to: email,
     subject: "Reset Password - Alert from  SnapShop",
     react: ResetPasswordEmail({
-      resetPasswordLink : resetLink
-    })
+      username,
+      updatedDate: new Date(),
+      resetPasswordLink: resetLink,
+    }),
   });
 
   if (error) {
