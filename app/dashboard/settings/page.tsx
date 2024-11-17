@@ -20,7 +20,7 @@ const Settings = async () => {
           {!session.user.isOauth && (
             <>
               <ChangePassword email={session.user.email!} />
-              <TwoFactor isTowFactorEnable={session.user.isTowFactorEnable} email={session.user.email} />
+              <TwoFactor isTowFactorEnable={session.user.isTowFactorEnable} email={session.user.email!} />
             </>
           )}
         </div>

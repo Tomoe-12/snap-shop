@@ -2,7 +2,7 @@
 
 import { useAction } from "next-safe-action/hooks";
 import AuthForm from "@/components/auth/auth-form";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,13 +21,23 @@ import Link from "next/link";
 import { login } from "@/server/actions/login-action";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const Login = () => {
+  const [isTwoFactorOn, setIsTwoFactorOn] = useState(false);
+  console.log("is two factor on or not", isTwoFactorOn);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
+      code: "",
     },
   });
 
@@ -36,66 +46,115 @@ const Login = () => {
       form.reset();
       if (data?.error) {
         toast.error(data?.error);
+        form.reset();
       }
       if (data?.success) {
         console.log("come in data.success");
         toast.success(data?.success);
-        if (data.redirectTo) {
-          setTimeout(() => {
-            window.location.href = data.redirectTo;
-          }, 1300); 
-        }
+        // if (data.redirectTo) {
+        //   setTimeout(() => {
+        //     window.location.href = data.redirectTo;
+        //   }, 1300);
+        // }
+      }
+      if (data?.twoFactor) {
+        toast.success(data?.twoFactor);
+        setIsTwoFactorOn(true);
       }
     },
   });
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    const { email, password } = values;
-    execute({ email, password });
+    console.log("values", values);
+    
+    const { email, password, code } = values;
+    execute({ email, password, code });
   };
 
   return (
-    <div>
+    <div className="">
       <AuthForm
-        formTitle="Login"
+        formTitle={isTwoFactorOn ? "Please Enter Your code" : "Login"}
         footerLabel="Don't have an Account ?"
         footerHerf="/auth/register"
         showProvider
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-3">
+            {isTwoFactorOn && (
               <FormField
-                name="email"
+                name="code"
                 control={form.control}
-                render={({ field }) => (
+                render={({ field }) => 
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>We sent a code to your email.</FormLabel>
                     <FormControl>
-                      <Input placeholder="snapLikeADoo@gmail.com" {...field} disabled={status === "executing"} />
+                      <InputOTP
+                       {...field}
+                        maxLength={6}
+                        disabled={status === "executing"}
+                      >
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                )}
+                }
               />
-              <FormField
-                name="password"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="******" {...field} type="password"  disabled={status === "executing"} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            )}
+            {!isTwoFactorOn && (
+              <div className="space-y-3">
+                <FormField
+                  name="email"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="snapLikeADoo@gmail.com"
+                          {...field}
+                          disabled={status === "executing"}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="password"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="******"
+                          {...field}
+                          type="password"
+                          disabled={status === "executing"}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button variant={"link"} size={"sm"} className="pl-0 mb-1">
-                <Link href={"/auth/reset"}>Forget Password</Link>
-              </Button>
-            </div>
+                <Button variant={"link"} size={"sm"} className="pl-0 mb-1">
+                  <Link href={"/auth/reset"}>Forget Password</Link>
+                </Button>
+              </div>
+            )}
 
             <Button
               type="submit"
@@ -105,7 +164,7 @@ const Login = () => {
               )}
               disabled={status === "executing"}
             >
-              Login
+              {isTwoFactorOn ? "Verify Code " : "Login"}
             </Button>
           </form>
         </Form>

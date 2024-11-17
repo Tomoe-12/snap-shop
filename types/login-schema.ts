@@ -7,5 +7,5 @@ export const loginSchema = z.object({
   password: z.string().min(4, {
     message: "Please enter at least 4 letters ",
   }),
-  code: z.string().optional(),
+  code: z.string().length(6, "Code must be exactly 6 characters").optional(),
 });

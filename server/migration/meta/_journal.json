@@ -29,6 +29,20 @@
       "when": 1730522724196,
       "tag": "0003_dark_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1731828503814,
+      "tag": "0004_thick_elektra",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1731828558027,
+      "tag": "0005_cheerful_tigra",
+      "breakpoints": true
     }
   ]
 }

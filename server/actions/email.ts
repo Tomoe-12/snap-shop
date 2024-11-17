@@ -4,6 +4,7 @@ import { getBaseUrl } from "@/lib/get-baseURL";
 import { Resend } from "resend";
 import { emailConfirmationTemplateProps } from "@/components/email-template";
 import { ResetPasswordEmail } from "@/components/password-reset-email";
+import MagicCodeEmail from "@/components/two-factor-mail";
 
 const currentBaseUrl = getBaseUrl();
 console.log("current", currentBaseUrl);
@@ -49,6 +50,26 @@ export const sendPasswordResetEmail = async (
       username,
       updatedDate: new Date(),
       resetPasswordLink: resetLink,
+    }),
+  });
+
+  if (error) {
+    console.log(error);
+  }
+};
+
+export const sendTwoFactorEmail = async (
+  username: string,
+  email: string,
+  code: string
+) => {
+
+  const { data, error } = await resend.emails.send({
+    from: "SnapShop <onboarding@resend.dev>",
+    to: email,
+    subject: "Two Factor Authenticatio Code  - SnapShop",
+    react: MagicCodeEmail({
+       code ,
     }),
   });
 
