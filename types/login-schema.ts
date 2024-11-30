@@ -1,11 +1,13 @@
 import * as z from "zod";
 
 export const loginSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(4, {
-    message: "Please enter at least 4 letters ",
-  }),
-  code: z.string().length(6, "Code must be exactly 6 characters").optional(),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+  code: z
+    .string()
+    .optional() // Make it optional
+    .refine(
+      (val) => !val || val.length === 6, // If present, it must be 6 characters long
+      { message: "Code must be 6 digits" }
+    ),
 });

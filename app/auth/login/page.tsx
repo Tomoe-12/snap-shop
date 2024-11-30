@@ -51,11 +51,11 @@ const Login = () => {
       if (data?.success) {
         console.log("come in data.success");
         toast.success(data?.success);
-        // if (data.redirectTo) {
-        //   setTimeout(() => {
-        //     window.location.href = data.redirectTo;
-        //   }, 1300);
-        // }
+        if (data.redirectTo) {
+          setTimeout(() => {
+            window.location.href = data.redirectTo;
+          }, 1300);
+        }
       }
       if (data?.twoFactor) {
         toast.success(data?.twoFactor);
