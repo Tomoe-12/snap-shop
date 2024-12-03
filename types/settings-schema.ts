@@ -15,3 +15,9 @@ export const twoFactorSchema = z.object({
     message: "Please enter a valid email address.",
   }),
 });
+
+export const avatarSchema = z.object({
+  image : z.string().url({
+    message: "Please enter a valid url",
+  })
+})

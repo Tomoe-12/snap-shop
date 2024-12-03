@@ -1,6 +1,6 @@
 "use server";
 
-import { settingsSchema, twoFactorSchema } from "@/types/settings-schema";
+import { avatarSchema, settingsSchema, twoFactorSchema } from "@/types/settings-schema";
 import { actionClient } from "./safe-action";
 import { db } from "@/server";
 import { eq } from "drizzle-orm";
@@ -26,7 +26,6 @@ export const updateDisplayName = actionClient
 export const twoFactorToogle = actionClient
   .schema(twoFactorSchema)
   .action(async ({ parsedInput: { isTowFactorEnable, email } }) => {
-
     const existingUser = await db.query.users.findFirst({
       where: eq(users.email, email),
     });
@@ -41,4 +40,12 @@ export const twoFactorToogle = actionClient
     revalidatePath("/dashboard/settings");
 
     return { success: "2FA Setting Saved " };
+  });
+
+export const profileAvatarUpdate = actionClient
+  .schema(avatarSchema)
+  .action(async ({ parsedInput: { image } }) => {
+    console.log("image", image);
+    if(image) return {success : 'Avatar Updated'}
+    return {error : 'Avatar Not Found'}
   });
