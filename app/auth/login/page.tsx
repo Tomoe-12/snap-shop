@@ -41,33 +41,73 @@ const Login = () => {
     },
   });
 
+  // const { execute, status, result } = useAction(login, {
+  //   onSuccess({ data }) {
+  //     form.reset();
+  //     if (data?.error) {
+  //       toast.error(data?.error);
+  //       form.reset();
+  //     }
+  //     if (data?.success) {
+  //       console.log("come in data.success");
+  //       toast.success(data?.success);
+  //       if (data.redirectTo) {
+  //         setTimeout(() => {
+  //           window.location.href = data.redirectTo;
+  //         }, 1300);
+  //       }
+  //     }
+  //     if (data?.twoFactor) {
+  //       toast.success(data?.twoFactor);
+  //       setIsTwoFactorOn(true);
+  //     }
+  //   },
+  // });
+
   const { execute, status, result } = useAction(login, {
     onSuccess({ data }) {
-      form.reset();
       if (data?.error) {
         toast.error(data?.error);
-        form.reset();
+        return; // Stop further actions
       }
+  
+      if (data?.twoFactor) {
+        toast.success(data?.twoFactor);
+        setIsTwoFactorOn(true);
+        return; // Wait for the second submission
+      }
+  
       if (data?.success) {
-        console.log("come in data.success");
         toast.success(data?.success);
         if (data.redirectTo) {
           setTimeout(() => {
             window.location.href = data.redirectTo;
           }, 1300);
         }
-      }
-      if (data?.twoFactor) {
-        toast.success(data?.twoFactor);
-        setIsTwoFactorOn(true);
+        form.reset(); // Reset only after full success
       }
     },
   });
+  
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     console.log("values", values);
     
     const { email, password, code } = values;
+    if (isTwoFactorOn) {
+      // Handle second submission (two-factor authentication)
+      if (!code) {
+        toast.error("Please enter the two-factor authentication code.");
+        return;
+      }
+    } else {
+      // Handle initial login submission
+      if (!email || !password) {
+        toast.error("Please provide email and password.");
+        return;
+      }
+    }
+  
     execute({ email, password, code });
   };
 
@@ -93,6 +133,7 @@ const Login = () => {
                        {...field}
                         maxLength={6}
                         disabled={status === "executing"}
+                        onChange={(value) => field.onChange(value)} // Propagate changes
                       >
                         <InputOTPGroup>
                           <InputOTPSlot index={0} />

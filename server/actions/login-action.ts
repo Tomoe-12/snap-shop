@@ -17,6 +17,8 @@ import { AuthError } from "next-auth";
 export const login = actionClient
   .schema(loginSchema)
   .action(async ({ parsedInput: { email, password, code } }) => {
+    console.log('code ',code);
+    
     try {
       // check email
       const existingUser = await db.query.users.findFirst({
