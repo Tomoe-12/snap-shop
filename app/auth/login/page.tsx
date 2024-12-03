@@ -70,13 +70,20 @@ const Login = () => {
         toast.error(data?.error);
         return; // Stop further actions
       }
-  
+
       if (data?.twoFactor) {
-        toast.success(data?.twoFactor);
+        toast.success(data?.twoFactor, {
+          action: {
+            label: "Open Gmail",
+            onClick: () => {
+              window.open("https://mail.google.com", "_blank");
+            },
+          },
+        });
         setIsTwoFactorOn(true);
         return; // Wait for the second submission
       }
-  
+
       if (data?.success) {
         toast.success(data?.success);
         if (data.redirectTo) {
@@ -88,11 +95,10 @@ const Login = () => {
       }
     },
   });
-  
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     console.log("values", values);
-    
+
     const { email, password, code } = values;
     if (isTwoFactorOn) {
       // Handle second submission (two-factor authentication)
@@ -107,7 +113,7 @@ const Login = () => {
         return;
       }
     }
-  
+
     execute({ email, password, code });
   };
 
@@ -125,12 +131,12 @@ const Login = () => {
               <FormField
                 name="code"
                 control={form.control}
-                render={({ field }) => 
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>We sent a code to your email.</FormLabel>
                     <FormControl>
                       <InputOTP
-                       {...field}
+                        {...field}
                         maxLength={6}
                         disabled={status === "executing"}
                         onChange={(value) => field.onChange(value)} // Propagate changes
@@ -150,7 +156,7 @@ const Login = () => {
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                }
+                )}
               />
             )}
             {!isTwoFactorOn && (
