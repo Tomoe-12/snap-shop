@@ -70,7 +70,7 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
               <FormItem>
                 <Avatar className="w-14 h-14 ">
                   {form.getValues("image") ? (
-                    <AvatarImage src={image!} alt="Profile" />
+                    <AvatarImage src={form.getValues('image')!} alt="Profile" />
                   ) : (
                     <AvatarFallback className="bg-primary text-white font-semibold w-32 ">
                       {name![0].toUpperCase()}
@@ -100,7 +100,9 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
                     },
                   }}
                   onClientUploadComplete={(res)=> {
-                    form.setValue('image', res[0].url!)
+                    console.log('res from thing ',res);
+                    const uploadUrl = res[0].url
+                    form.setValue("image",uploadUrl)
                     setIsUploading(false)
                     return
                   }}
