@@ -24,15 +24,17 @@ import { Input } from "../ui/input";
 type AvatarUploadFormProps = {
   name: string;
   image: string | null;
+  email: string;
 };
 
-const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
+const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(avatarSchema),
     defaultValues: {
-      image : image || '',
+      image: image || "",
+      email : email 
     },
   });
 
@@ -53,7 +55,7 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
     console.log("values", values);
 
     const { image } = values;
-    execute({ image }); 
+    execute({ image, email });
   };
 
   return (
@@ -70,7 +72,7 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
               <FormItem>
                 <Avatar className="w-14 h-14 ">
                   {form.getValues("image") ? (
-                    <AvatarImage src={form.getValues('image')!} alt="Profile" />
+                    <AvatarImage src={form.getValues("image")!} alt="Profile" />
                   ) : (
                     <AvatarFallback className="bg-primary text-white font-semibold w-32 ">
                       {name![0].toUpperCase()}
@@ -84,12 +86,12 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
                     setIsUploading(true);
                   }}
                   onUploadError={() => {
-                    form.setError('image', { 
-                        type : 'validate',
-                        message : 'Error uploading image'
+                    form.setError("image", {
+                      type: "validate",
+                      message: "Error uploading image",
                     });
                     setIsUploading(false);
-                    return 
+                    return;
                   }}
                   content={{
                     button({ ready }) {
@@ -99,12 +101,12 @@ const AvatarUploadForm = ({ image, name }: AvatarUploadFormProps) => {
                       return <div>Uploading...</div>;
                     },
                   }}
-                  onClientUploadComplete={(res)=> {
-                    console.log('res from thing ',res);
-                    const uploadUrl = res[0].url
-                    form.setValue("image",uploadUrl)
-                    setIsUploading(false)
-                    return
+                  onClientUploadComplete={(res) => {
+                    console.log("res from thing ", res);
+                    const uploadUrl = res[0].url;
+                    form.setValue("image", uploadUrl);
+                    setIsUploading(false);
+                    return;
                   }}
                 />
                 <FormControl>

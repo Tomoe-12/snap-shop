@@ -1,6 +1,10 @@
 "use server";
 
-import { avatarSchema, settingsSchema, twoFactorSchema } from "@/types/settings-schema";
+import {
+  avatarSchema,
+  settingsSchema,
+  twoFactorSchema,
+} from "@/types/settings-schema";
 import { actionClient } from "./safe-action";
 import { db } from "@/server";
 import { eq } from "drizzle-orm";
@@ -44,8 +48,25 @@ export const twoFactorToogle = actionClient
 
 export const profileAvatarUpdate = actionClient
   .schema(avatarSchema)
-  .action(async ({ parsedInput: { image } }) => {
+  .action(async ({ parsedInput: { image, email } }) => {
     console.log("image", image);
-    if(image) return {success : 'Avatar Updated'}
-    return {error : 'Avatar Not Found'}
+    console.log('email,',email);
+    
+
+    if (!image) return { error: "Avatar not found !" };
+
+    if (!email) return { error: "Email not found !" };
+
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    if (!existingUser) return { error: "Something Went Wrong :-( " };
+
+    await db.update(users).set({ image }).where(eq(users.email, email));
+
+    revalidatePath("/dashboard/settings");
+
+    if (image) return { success: "Avatar Updated" };
+    return { error: "Avatar Not Found" };
   });
