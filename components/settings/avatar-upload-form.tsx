@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { UploadButton } from "@/app/api/uploadthing/uploadthing";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
     resolver: zodResolver(avatarSchema),
     defaultValues: {
       image: image || "",
-      email : email 
+      email 
     },
   });
 
@@ -58,21 +58,25 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
     execute({ image, email });
   };
 
+  useEffect(() => {
+    form.setValue("image", image || "");
+  }, [image,form]);
+
   return (
     <>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 px-4 lg:px-0"
+          className="space-y-4 "
         >
           <FormField
             name="image"
             control={form.control}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className=" flex items-center flex-col justify-center  " >
                 <Avatar className="w-14 h-14 ">
-                  {form.getValues("image") ? (
-                    <AvatarImage src={form.getValues("image")!} alt="Profile" />
+                  {(form.getValues("image") || image) ? (
+                    <AvatarImage src={form.getValues("image")! || image! } alt="Profile" />
                   ) : (
                     <AvatarFallback className="bg-primary text-white font-semibold w-32 ">
                       {name![0].toUpperCase()}
@@ -80,7 +84,7 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
                   )}
                 </Avatar>
                 <UploadButton
-                  className="scale-75 ut-button:bg-primary ut-button:hover:bg-green-500"
+                  className="scale-75 hover:ut-button:ring-primary ut-button:ring-primary  ut-button:bg-primary ut-button:hover:bg-green-500"
                   endpoint="imageUploader"
                   onUploadBegin={() => {
                     setIsUploading(true);
@@ -105,6 +109,7 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
                     console.log("res from thing ", res);
                     const uploadUrl = res[0].url;
                     form.setValue("image", uploadUrl);
+                    form.handleSubmit(onSubmit)();
                     setIsUploading(false);
                     return;
                   }}
@@ -117,16 +122,7 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
             )}
           />
 
-          <Button
-            type="submit"
-            className={cn(
-              "w-full my-4",
-              status === "executing" && "animate-pulse"
-            )}
-            disabled={status === "executing"}
-          >
-            Save Changes
-          </Button>
+        
         </form>
       </Form>
     </>

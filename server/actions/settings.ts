@@ -49,9 +49,6 @@ export const twoFactorToogle = actionClient
 export const profileAvatarUpdate = actionClient
   .schema(avatarSchema)
   .action(async ({ parsedInput: { image, email } }) => {
-    console.log("image", image);
-    console.log('email,',email);
-    
 
     if (!image) return { error: "Avatar not found !" };
 
