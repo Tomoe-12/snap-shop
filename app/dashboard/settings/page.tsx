@@ -7,6 +7,7 @@ import React from "react";
 import SettingsCard from "@/components/settings/settings-card";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
+import SettingLogout from "@/components/settings/log-out";
 
 const Settings = async () => {
   const session = await auth();
@@ -14,16 +15,18 @@ const Settings = async () => {
 
   return (
     <SettingsCard title="Settings" description="Manage your account settings">
-      <main className="grid  md:grid-cols-2 gap-4 pt-6 ">
+      <main className="flex flex-col gap-4  ">
         <ProfileCard session={session} />
-        <div className="space-y-4">
-          {!session.user.isOauth && (
-            <>
-              <ChangePassword email={session.user.email!} />
-              <TwoFactor isTowFactorEnable={session.user.isTowFactorEnable} email={session.user.email!} />
-            </>
-          )}
-        </div>
+        {!session.user.isOauth && (
+          <>
+            <ChangePassword email={session.user.email!} />
+            <TwoFactor
+              isTowFactorEnable={session.user.isTowFactorEnable}
+              email={session.user.email!}
+            />
+          </>
+        )}
+        <SettingLogout />
       </main>
     </SettingsCard>
   );

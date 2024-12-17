@@ -48,11 +48,15 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
           <AvatarUploadForm
             name={session?.user?.name!}
             image={session?.user?.image}
-            email={session?.user?.email!} 
+            email={session?.user?.email!}
           />
           <div>
-            <h2 className="font-semibold text-lg">{session?.user?.name}</h2>
-            <p className="text-sm font-medium text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground ">
+              Display Name
+            </p>
+            <h2 className="font-medium text-lg">{session?.user?.name}</h2>
+            <p className="text-sm font-medium text-muted-foreground ">Email</p>
+            <p className="text-base font-medium">
               {session?.user?.email}
             </p>
           </div>
