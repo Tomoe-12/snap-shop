@@ -43,6 +43,13 @@
       "when": 1731828558027,
       "tag": "0005_cheerful_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1734594373708,
+      "tag": "0006_productive_killmonger",
+      "breakpoints": true
     }
   ]
 }
