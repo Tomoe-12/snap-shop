@@ -2,7 +2,7 @@
 
 import { productSchema } from "@/types/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -26,12 +26,19 @@ import {
 import { DollarSign } from "lucide-react";
 import Tiptap from "./tip-tap";
 import { useAction } from "next-safe-action/hooks";
-import { insertOrUpdateProduct } from "@/server/actions/products";
+import {
+  getSingleProductId,
+  insertOrUpdateProduct,
+} from "@/server/actions/products";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 
 const CreateProductForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEditParams = searchParams.get("edit_id") || null;
+  const [editProduct, setEditProduct] = useState('')
+
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -59,6 +66,30 @@ const CreateProductForm = () => {
     execute({ title, description, price, id });
   };
 
+  const isProductExist = async (id: number) => {
+    if (isEditParams) {
+      const res = await getSingleProductId(id);
+      if (res.error) {
+        toast.error(res.error);
+        router.push("/products");
+        return;
+      }
+      if (res.success) {
+        form.setValue("title", res.success?.title);
+        form.setValue("description", res.success?.description);
+        form.setValue("price", res.success?.price);
+        form.setValue("id", res.success?.id);
+        setEditProduct(res.success.title)
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isEditParams) {
+      isProductExist(Number(isEditParams));
+    }
+  }, []);
+
   useEffect(() => {
     form.setValue("description", "");
   }, [form]);
@@ -66,8 +97,8 @@ const CreateProductForm = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create Product</CardTitle>
-        <CardDescription>Create a new product .</CardDescription>
+        <CardTitle> {isEditParams ? 'Edit Product' : 'Create Product' }</CardTitle>
+        <CardDescription>{isEditParams ? `Edit your product : ${editProduct} ` : 'Create a new product .'}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -123,8 +154,8 @@ const CreateProductForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+            <Button  disabled={status === "executing"} type="submit" className="w-full">
+             {isEditParams ? 'Update Product' :'Create Product' }
             </Button>
           </form>
         </Form>

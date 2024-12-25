@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Toggle } from "@/components/ui/toggle";
@@ -19,6 +19,9 @@ type tiptapDes = {
   val: string;
 };
 const Tiptap = ({ val }: tiptapDes) => {
+  useEffect(() => {
+    if (editor?.isEmpty) editor.commands.setContent(val);
+  }, [val]);
   const { setValue } = useFormContext();
   const editor = useEditor({
     extensions: [
@@ -44,10 +47,10 @@ const Tiptap = ({ val }: tiptapDes) => {
     },
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
-      setValue('description',content,{
-        shouldValidate : true ,
-        shouldDirty : true ,
-      })
+      setValue("description", content, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
   });
 

@@ -35,3 +35,16 @@ export const insertOrUpdateProduct = actionClient
       return { error: "sth went wrong" };
     }
   });
+
+export const getSingleProductId = async(id:number) => {
+  try {
+    const product = await db.query.products.findFirst({
+      where  : eq(products.id ,id)
+    })
+    if(!product) return {error : 'Product Not Found'}
+    return {success : product }
+
+  } catch (error) {
+    return {error : 'sth went wrong'}
+  }
+}

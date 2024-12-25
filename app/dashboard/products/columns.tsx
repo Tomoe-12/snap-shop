@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Product = {
@@ -68,8 +70,8 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "action",
     header: "Actions",
     cell: ({ row }) => {
-      const payment = row.original;
-
+      const product = row.original;
+      const router = useRouter();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -80,9 +82,18 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem className='cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300'>Edit Product</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`create-product?edit_id=${product.id}`)
+              }
+              className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300"
+            >
+              Edit Product
+            </DropdownMenuItem>
             {/* <DropdownMenuSeparator /> */}
-            <DropdownMenuItem className='cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300' >Delete</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300">
+              Delete
+            </DropdownMenuItem>
             {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
