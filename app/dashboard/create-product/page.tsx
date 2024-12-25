@@ -1,108 +1,66 @@
-"use client";
+// "use client";
 
-import { productSchema } from "@/types/product-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DollarSign } from "lucide-react";
-import Tiptap from "./tip-tap";
+// import { productSchema } from "@/types/product-schema";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import React from "react";
+// import { useForm } from "react-hook-form";
+// import * as z from "zod";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Form,
+//   FormControl,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { DollarSign } from "lucide-react";
+// import Tiptap from "./tip-tap";
 
 
-const CreateProduct = () => {
-  const form = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-    },
-  });
+// const CreateProduct = () => {
+//   const form = useForm<z.infer<typeof productSchema>>({
+//     resolver: zodResolver(productSchema),
+//     defaultValues: {
+//       title: "",
+//       description: "",
+//       price: 0,
+//     },
+//   });
 
-  const onSubmit = (values: z.infer<typeof productSchema>) => {
-    console.log(values);
-  };
+//   const onSubmit = (values: z.infer<typeof productSchema>) => {
+//     console.log(values);
+//   };
+//   return (
+   
+//   );
+// };
+
+// export default CreateProduct;
+
+import { auth } from '@/server/auth'
+import { redirect } from 'next/navigation'
+import React from 'react'
+import CreateProductForm from './create-product-form'
+
+const CreateProduct = async() => {
+
+  const session = await auth()
+  if(session?.user.role !== 'admin')return redirect('/dashboard/settings')
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Product</CardTitle>
-        <CardDescription>Create a new product .</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="T-shirt" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem  >
-                  <FormLabel>Product Description</FormLabel>
-                  <FormControl>
-                   <Tiptap val={field.value}/>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Price</FormLabel>
-                  <FormControl>
-                    <div className=" flex items-center gap-2  ">
-                      <DollarSign size={36} className="p-2 bg-muted rounded-md" />
-                      <Input
-                        placeholder="Price must show in MMK"
-                        {...field}
-                        step={100}
-                        min={0}
-                        type="number"
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full">Submit</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
-  );
-};
+    <CreateProductForm>
+      
+    </CreateProductForm>
+  )
+}
 
-export default CreateProduct;
+export default CreateProduct
