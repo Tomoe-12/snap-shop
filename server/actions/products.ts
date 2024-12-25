@@ -1,6 +1,6 @@
 "use server";
 
-import { productSchema } from "@/types/product-schema";
+import { deleteProductSchema, productSchema } from "@/types/product-schema";
 import { actionClient } from "./safe-action";
 import { db } from "@/server";
 import { products } from "../schema";
@@ -36,15 +36,26 @@ export const insertOrUpdateProduct = actionClient
     }
   });
 
-export const getSingleProductId = async(id:number) => {
+export const getSingleProductId = async (id: number) => {
   try {
     const product = await db.query.products.findFirst({
-      where  : eq(products.id ,id)
-    })
-    if(!product) return {error : 'Product Not Found'}
-    return {success : product }
-
+      where: eq(products.id, id),
+    });
+    if (!product) return { error: "Product Not Found" };
+    return { success: product };
   } catch (error) {
-    return {error : 'sth went wrong'}
+    return { error: "sth went wrong" };
   }
-}
+};
+
+export const deleteProduct = actionClient
+  .schema(deleteProductSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    try {
+      await db.delete(products).where(eq(products.id, id));
+      revalidatePath("/dashboard/products");
+      return { success: "Deleted Successfully " };
+    } catch (error) {
+      return { error: "Sth went wrong " };
+    }
+  });

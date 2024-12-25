@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,9 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAction } from "next-safe-action/hooks";
+import { deleteProduct } from "@/server/actions/products";
+import { toast } from "sonner";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Product = {
@@ -24,6 +27,51 @@ export type Product = {
   description: string;
   image: string;
   variants: any;
+};
+
+const ActionCell = (row: Row<Product>) => {
+  const product = row.original;
+  const router = useRouter();
+
+  const { execute } = useAction(deleteProduct, {
+    onSuccess: ({ data }) => {
+      if (data?.error) {
+        toast.error(data.error);
+      }
+      if (data?.success) {
+        toast.success(data.success);
+      }
+    },
+  });
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => router.push(`create-product?edit_id=${product.id}`)}
+          className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300"
+        >
+          Edit Product
+        </DropdownMenuItem>
+        {/* <DropdownMenuSeparator /> */}
+        <DropdownMenuItem
+          onClick={() => {
+            execute({ id: product.id });
+          }}
+          className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300"
+        >
+          Delete
+        </DropdownMenuItem>
+        {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export const columns: ColumnDef<Product>[] = [
@@ -70,34 +118,7 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "action",
     header: "Actions",
     cell: ({ row }) => {
-      const product = row.original;
-      const router = useRouter();
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(`create-product?edit_id=${product.id}`)
-              }
-              className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300"
-            >
-              Edit Product
-            </DropdownMenuItem>
-            {/* <DropdownMenuSeparator /> */}
-            <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300">
-              Delete
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return ActionCell(row);
     },
   },
 ];

@@ -12,3 +12,7 @@ export const productSchema = z.object({
     .number({ invalid_type_error: "Please Enter a number" })
     .positive({ message: "Please enter a positive number" }),
 });
+
+export const deleteProductSchema = z.object({
+  id:z.number()
+})
