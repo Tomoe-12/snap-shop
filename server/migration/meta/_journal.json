@@ -50,6 +50,13 @@
       "when": 1734594373708,
       "tag": "0006_productive_killmonger",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1735304488202,
+      "tag": "0007_thin_sharon_carter",
+      "breakpoints": true
     }
   ]
 }
