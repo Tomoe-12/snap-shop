@@ -7,7 +7,6 @@ import { ResetPasswordEmail } from "@/components/password-reset-email";
 import MagicCodeEmail from "@/components/two-factor-mail";
 
 const currentBaseUrl = getBaseUrl();
-console.log("current", currentBaseUrl);
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
