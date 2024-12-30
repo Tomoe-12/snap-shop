@@ -30,7 +30,7 @@ const privateRoutes = [
     icons: <ChartNoAxesCombined size={16} />,
   },
   {
-    label: "Create Product",
+    label: "Create_Product",
     path: "/dashboard/create-product",
     icons: <PackagePlus size={16} />,
   },
