@@ -1,3 +1,4 @@
+import { metadata } from "@/app/layout";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -39,6 +40,11 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       //   return { uploadedBy: metadata.userId };
     }),
+    variantImagesUploader : f({image : {maxFileSize : '4MB' , maxFileCount : 10}})
+    .onUploadComplete (async ({metadata , file}) =>{
+      console.log('variant file url : ',file.url);
+      
+    } )
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

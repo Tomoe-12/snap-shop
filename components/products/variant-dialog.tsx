@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
+import VariantImages from "./variant-images";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -115,10 +116,9 @@ const VariantDialog = ({
                 </FormItem>
               )}
             />
-
+          <VariantImages/>
             <Button
               className="w-full"
-              disabled={status === "executing"}
               type="submit"
             >
               {editMode
