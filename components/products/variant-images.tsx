@@ -11,6 +11,9 @@ import {
   FormMessage,
 } from "../ui/form";
 import { UploadDropzone } from "@/app/api/uploadthing/uploadthing";
+import Image from "next/image";
+import { Trash, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const VariantImages = () => {
   const { control, getValues, setError } =
@@ -75,6 +78,36 @@ const VariantImages = () => {
           </FormItem>
         )}
       />
+      <div className="flex overflow-x-scroll gap-2 my-2 border-red-00 border ">
+        {fields.map((field, i) => (
+          <div
+            key={i}
+            className={cn(
+              "flex border border-gray-400 rounded-md relative group overflow-hidden",
+              field.url.startsWith("blob:")
+                ? "animate-pulse "
+                : ""
+            )}
+          >
+            <Image
+              src={field.url}
+              alt={field.name}
+              width={100}
+              height={70}
+              className="object-cover"
+            />
+            <div
+              className="absolute w-full flex justify-center bg-gray-800/60 -bottom-0 translate-y-2 cursor-pointer  text-red-600 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+              onClick={(e) => {
+                e.preventDefault();
+                remove(i);
+              }}
+            >
+              <Trash className="w-5 h-5 my-0.5 cursor-pointer  rounded-full text-red-600 fill-red-600" />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
