@@ -61,7 +61,7 @@ const VariantDialog = ({
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-[52rem] overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {editMode ? "Update an existing" : "Create New"} product's Variant{" "}

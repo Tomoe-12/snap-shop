@@ -59,7 +59,7 @@ const VariantImages = () => {
                   const variantImages = getValues("variantImage");
                   variantImages.forEach((img, i) => {
                     if (img.url.startsWith("blob:")) {
-                      const image = data.find((img) => img.name === field.name);
+                      const image = data.find((i) => i.name === img.name);
                       if (image) {
                         update(i, {
                           url: image.url,
@@ -78,7 +78,7 @@ const VariantImages = () => {
           </FormItem>
         )}
       />
-      <div className="flex overflow-x-scroll gap-2 my-2 border-red-00 border ">
+      <div className="flex flex-wrap items-center gap-2 my-2">
         {fields.map((field, i) => (
           <div
             key={i}
@@ -94,7 +94,7 @@ const VariantImages = () => {
               alt={field.name}
               width={100}
               height={70}
-              className="object-cover"
+              className="object-cover min-w-20 min-h-40 max-w-20 max-h-40"
             />
             <div
               className="absolute w-full flex justify-center bg-gray-800/60 -bottom-0 translate-y-2 cursor-pointer  text-red-600 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
