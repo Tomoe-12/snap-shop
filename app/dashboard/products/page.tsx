@@ -2,7 +2,7 @@ import { db } from "@/server";
 import React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import myMan from '../../../public/91041aca4100e4743ba56f6f70497884.jpg'
+import myMan from '../../../public/placeholder.jpg'
 const Products = async () => {
   const products = await db.query.products.findMany({
     orderBy: (products, { desc }) => [desc(products.id)],
