@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,9 @@ import {
 import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
+import { useAction } from "next-safe-action/hooks";
+import { createVariant } from "@/server/actions/variant";
+import { toast } from "sonner";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -35,22 +38,20 @@ type VariantDialogProps = {
   variant?: VariantsWithImagesTags;
 };
 
-const onSubmit = (values: z.infer<typeof variantSchema>) => {
-  console.log(values);
-};
-
 const VariantDialog = ({
   children,
   editMode,
   productID,
   variant,
 }: VariantDialogProps) => {
+  const [open, setOpen] = useState(false);
+
   const form = useForm<z.infer<typeof variantSchema>>({
     resolver: zodResolver(variantSchema),
     defaultValues: {
       tags: [],
       variantImage: [],
-      color: "#000",
+      color: "#000000",
       id: undefined,
       productType: "Black",
       productID,
@@ -58,8 +59,35 @@ const VariantDialog = ({
     },
   });
 
+  const { execute, status, result } = useAction(createVariant, {
+    onSuccess({ data }) {
+      setOpen(false);
+      if (data?.error) {
+        toast.error(data?.error);
+        form.reset();
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+      }
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof variantSchema>) => {
+    const { id, color, editMode, productType, productID, tags, variantImage } =
+      values;
+    execute({
+      id,
+      color,
+      editMode,
+      productType,
+      productID,
+      tags,
+      variantImage,
+    });
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="h-[52rem] overflow-auto">
         <DialogHeader>
@@ -116,10 +144,11 @@ const VariantDialog = ({
                 </FormItem>
               )}
             />
-          <VariantImages/>
+            <VariantImages />
             <Button
               className="w-full"
               type="submit"
+              disabled={status === "executing"}
             >
               {editMode
                 ? "Update product's variant"
