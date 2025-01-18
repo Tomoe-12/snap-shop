@@ -21,14 +21,14 @@ const VariantImages = () => {
 
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "variantImage",
+    name: "variantImages",
   });
 
   return (
     <div>
       <FormField
         control={control}
-        name="variantImage"
+        name="variantImages"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Upload Images</FormLabel>
@@ -50,13 +50,13 @@ const VariantImages = () => {
                   return files;
                 }}
                 onUploadError={(error) => {
-                  setError("variantImage", {
+                  setError("variantImages", {
                     type: "validate",
                     message: error.message,
                   });
                 }}
                 onClientUploadComplete={(data) => {
-                  const variantImages = getValues("variantImage");
+                  const variantImages = getValues("variantImages");
                   variantImages.forEach((img, i) => {
                     if (img.url.startsWith("blob:")) {
                       const image = data.find((i) => i.name === img.name);

@@ -11,7 +11,7 @@ export const variantSchema = z.object({
   productType: z
     .string()
     .min(3, { message: "Please enter at least 3 characters" }),
-  variantImage: z.array(
+  variantImages: z.array(
     z.object({
       url: z.string().url({ message: "Please enter a valid image url ." }),
       size: z.number(),

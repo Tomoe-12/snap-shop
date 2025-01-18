@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -50,7 +50,7 @@ const VariantDialog = ({
     resolver: zodResolver(variantSchema),
     defaultValues: {
       tags: [],
-      variantImage: [],
+      variantImages: [],
       color: "#000000",
       id: undefined,
       productType: "Black",
@@ -73,8 +73,9 @@ const VariantDialog = ({
   });
 
   const onSubmit = (values: z.infer<typeof variantSchema>) => {
-    const { id, color, editMode, productType, productID, tags, variantImage } =
+    const { id, color, editMode, productType, productID, tags, variantImages } =
       values;
+
     execute({
       id,
       color,
@@ -82,9 +83,37 @@ const VariantDialog = ({
       productType,
       productID,
       tags,
-      variantImage,
+      variantImages,
     });
   };
+
+  const getOldData = () => {
+    if (editMode && variant) {
+      form.setValue("editMode", true);
+      form.setValue("id", variant.id);
+      form.setValue("productID", variant.productID);
+      form.setValue("productType", variant.productType);
+      form.setValue("color", variant.color);
+      form.setValue(
+        "tags",
+        variant.variantTags.map((t) => t.tag)
+      );
+      form.setValue(
+        "variantImages",
+        variant.variantImages.map((img) => {
+          return {
+            url: img.image_url,
+            size: Number(img.size),
+            name: img.name,
+          };
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    getOldData();
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -148,7 +177,11 @@ const VariantDialog = ({
             <Button
               className="w-full"
               type="submit"
-              disabled={status === "executing"}
+              disabled={
+                status === "executing" ||
+                !form.formState.isValid ||
+                !form.formState.isDirty
+              }
             >
               {editMode
                 ? "Update product's variant"
