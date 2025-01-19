@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { actionClient } from "./safe-action";
 import { db } from "@/server";
@@ -12,6 +12,7 @@ import {
 } from "../schema";
 import { variantSchema } from "@/types/variant-schema";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export const createVariant = actionClient
   .schema(variantSchema)
@@ -35,7 +36,8 @@ export const createVariant = actionClient
               color,
               productType,
               updated: new Date(),
-            }).where(eq(productVariants.id,id))
+            })
+            .where(eq(productVariants.id, id))
             .returning();
           await db
             .delete(variantTags)
@@ -109,3 +111,16 @@ export const createVariant = actionClient
       }
     }
   );
+
+export const deleteVariant = actionClient
+  .schema(z.object({ id: z.number() }))
+  .action(async ({ parsedInput: { id } }) => {
+    try {
+      await db.delete(productVariants).where(eq(productVariants.id, id));
+      revalidatePath("/dashboard/products");
+      return { success: `Variant deleted.` };
+    } catch (error) {
+      console.log(error);
+      return { error: "Sth went wrong" };
+    }
+  });

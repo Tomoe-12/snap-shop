@@ -28,7 +28,10 @@ import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
 import { useAction } from "next-safe-action/hooks";
-import { createVariant } from "@/server/actions/variant";
+import {
+  createVariant,
+  deleteVariant,
+} from "@/server/actions/variant";
 import { toast } from "sonner";
 
 type VariantDialogProps = {
@@ -44,6 +47,8 @@ const VariantDialog = ({
   productID,
   variant,
 }: VariantDialogProps) => {
+  console.log("editmode", editMode);
+
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof variantSchema>>({
@@ -86,6 +91,19 @@ const VariantDialog = ({
       variantImages,
     });
   };
+
+  const variantDelete = useAction(deleteVariant, {
+    onSuccess({ data }) {
+      setOpen(false);
+      if (data?.error) {
+        toast.error(data?.error);
+        form.reset();
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+      }
+    },
+  });
 
   const getOldData = () => {
     if (editMode && variant) {
@@ -174,19 +192,37 @@ const VariantDialog = ({
               )}
             />
             <VariantImages />
-            <Button
+            <div className="flex gap-2">
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={
+                  status === "executing" ||
+                  !form.formState.isValid 
+                }
+              >
+                {editMode
+                  ? "Update product's variant"
+                  : "Create Proudct's Variant"}
+              </Button>
+             {
+              editMode &&  <Button
               className="w-full"
-              type="submit"
+              type="button"
+              variant={"destructive"}
+              onClick={(e) => {
+                e.preventDefault();
+                variantDelete.execute({ id: variant?.id! });
+              }}
               disabled={
                 status === "executing" ||
-                !form.formState.isValid ||
-                !form.formState.isDirty
+                !form.formState.isValid 
               }
             >
-              {editMode
-                ? "Update product's variant"
-                : "Create Proudct's Variant"}
+             Delete product's variant
             </Button>
+             }
+            </div>
           </form>
         </Form>
       </DialogContent>

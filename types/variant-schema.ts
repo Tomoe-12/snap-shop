@@ -7,7 +7,7 @@ export const variantSchema = z.object({
   color: z.string().min(3, { message: "Please enter at least 3 characters" }),
   tags: z.array(
     z.string().min(3, { message: "Please enter at least 3 characters" })
-  ),
+  ).min(1,{message : 'Please select at least one tag.'}),
   productType: z
     .string()
     .min(3, { message: "Please enter at least 3 characters" }),
@@ -19,5 +19,5 @@ export const variantSchema = z.object({
       id: z.number().optional(),
       name: z.string(),
     })
-  ),
+  ).min(1,{message : 'Please select at least one tag.'}),
 });
