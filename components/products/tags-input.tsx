@@ -36,12 +36,16 @@ const TagsInput = forwardRef<HTMLInputElement, TagsInputProps>(
 
         <div className="flex flex-wrap gap-2 mt-2">
           {value.map((tag, index) => (
-            <div key={index}className="flex items-center gap-1 border-gray-400 border-2 p-1 rounded-md text-xs font-semibold ">
-              <span >
-                {tag}
-              </span>
-              <X className="w-4 h-4 cursor-pointer" 
-              onClick={()=> handleOnChange(value.filter((_,i)=> i !== index))}
+            <div
+              key={index}
+              className="flex items-center gap-1 border-gray-400 border-2 p-1 rounded-md text-xs font-semibold "
+            >
+              <span>{tag}</span>
+              <X
+                className="w-4 h-4 cursor-pointer"
+                onClick={() =>
+                  handleOnChange(value.filter((_, i) => i !== index))
+                }
               />
             </div>
           ))}

@@ -28,10 +28,7 @@ import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
 import { useAction } from "next-safe-action/hooks";
-import {
-  createVariant,
-  deleteVariant,
-} from "@/server/actions/variant";
+import { createVariant, deleteVariant } from "@/server/actions/variant";
 import { toast } from "sonner";
 
 type VariantDialogProps = {
@@ -54,7 +51,14 @@ const VariantDialog = ({
   const form = useForm<z.infer<typeof variantSchema>>({
     resolver: zodResolver(variantSchema),
     defaultValues: {
-      tags: [],
+      tags: [
+        "iPhone",
+        "iPad",
+        "MacBook",
+        "Apple Watch",
+        "Accessories",
+        "Cover",
+      ],
       variantImages: [],
       color: "#000000",
       id: undefined,
@@ -136,7 +140,7 @@ const VariantDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className="h-[52rem] overflow-auto">
+      <DialogContent className="h-[48rem] rounded-lg  overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {editMode ? "Update an existing" : "Create New"} product's Variant{" "}
@@ -196,32 +200,26 @@ const VariantDialog = ({
               <Button
                 className="w-full"
                 type="submit"
-                disabled={
-                  status === "executing" ||
-                  !form.formState.isValid 
-                }
+                disabled={status === "executing" || !form.formState.isValid}
               >
                 {editMode
                   ? "Update product's variant"
                   : "Create Proudct's Variant"}
               </Button>
-             {
-              editMode &&  <Button
-              className="w-full"
-              type="button"
-              variant={"destructive"}
-              onClick={(e) => {
-                e.preventDefault();
-                variantDelete.execute({ id: variant?.id! });
-              }}
-              disabled={
-                status === "executing" ||
-                !form.formState.isValid 
-              }
-            >
-             Delete product's variant
-            </Button>
-             }
+              {editMode && (
+                <Button
+                  className="w-full"
+                  type="button"
+                  variant={"destructive"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    variantDelete.execute({ id: variant?.id! });
+                  }}
+                  disabled={status === "executing" || !form.formState.isValid}
+                >
+                  Delete product's variant
+                </Button>
+              )}
             </div>
           </form>
         </Form>
