@@ -70,10 +70,10 @@ const VariantDialog = ({
 
   const { execute, status, result } = useAction(createVariant, {
     onSuccess({ data }) {
+      form.reset();
       setOpen(false);
       if (data?.error) {
         toast.error(data?.error);
-        form.reset();
       }
       if (data?.success) {
         toast.success(data?.success);
@@ -98,10 +98,10 @@ const VariantDialog = ({
 
   const variantDelete = useAction(deleteVariant, {
     onSuccess({ data }) {
+      form.reset();
       setOpen(false);
       if (data?.error) {
         toast.error(data?.error);
-        form.reset();
       }
       if (data?.success) {
         toast.success(data?.success);
