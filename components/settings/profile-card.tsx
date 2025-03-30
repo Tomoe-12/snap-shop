@@ -38,6 +38,8 @@ type ProfileCardProps = {
   session: Session;
 };
 const ProfileCard = ({ session }: ProfileCardProps) => {
+  console.log('session',session);
+  
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,9 +52,9 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
       <div className="flex items-start gap-2 justify-between">
         <div className="flex items-start gap-2 flex-col lg:flex-row">
           <AvatarUploadForm
-            name={session.user?.name}
+            name={session.user?.name!}
             image={session.user?.image}
-            email={session.user.email}
+            email={session.user.email!}
           />
           <div>
             <p className="text-sm font-medium text-muted-foreground">
@@ -84,6 +86,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
               <ProfileForm
                 name={session.user?.name!}
                 email={session.user?.email!}
+                handleSetOpen={handleisOpen}
                 setIsOpen={handleisOpen}
               />
               <DialogClose asChild>
@@ -108,6 +111,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
               <ProfileForm
                 name={session.user?.name!}
                 email={session.user?.email!}
+                handleSetOpen={handleisOpen}
                 setIsOpen={handleisOpen}
               />
               <DrawerFooter>

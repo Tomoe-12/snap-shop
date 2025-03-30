@@ -23,6 +23,7 @@ type profilefileProps = {
   name: string;
   email: string;
   handleSetOpen(): void;
+  setIsOpen (): void
 };
 const ProfileForm = ({ handleSetOpen, name, email }: profilefileProps) => {
   const form = useForm<z.infer<typeof settingsSchema>>({

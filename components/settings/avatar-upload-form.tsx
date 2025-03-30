@@ -55,6 +55,8 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
     console.log("values", values);
 
     const { image } = values;
+    console.log('image',image);
+    
     execute({ image, email });
   };
 
@@ -108,7 +110,7 @@ const AvatarUploadForm = ({ image, name, email }: AvatarUploadFormProps) => {
                   onClientUploadComplete={(res) => {
                     console.log("res from thing ", res);
                     const uploadUrl = res[0].url;
-                    form.setValue("image", uploadUrl);
+                    form.setValue("image",uploadUrl);
                     form.handleSubmit(onSubmit)();
                     setIsUploading(false);
                     return;

@@ -13,7 +13,7 @@ const SettingLogout = () => {
       <Button variant={"destructive"} onClick={() => signOut()}>
         <LogOut className="mr-2 h-4 w-4" />
         Logout
-      </Button>
+      </Button>k
     </SettingsCard>
   );
 };
