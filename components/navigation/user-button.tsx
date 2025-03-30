@@ -25,7 +25,7 @@ const Userbutton = ({ user, expires }: Session) => {
         //   Logout
         // </Button>
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger className="ring-0 border-2 border-primary rounded-full" >
             <Avatar>
               <AvatarImage src={user?.image!} />
               <AvatarFallback className="bg-primary text-white font-semibold">

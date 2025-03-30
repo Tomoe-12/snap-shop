@@ -57,7 +57,7 @@ export const emailConfirmationTemplateProps = ({
 };
 
 emailConfirmationTemplateProps.PreviewProps = {
-  userFirstname: "Snap Shop",
+  userFirstname: "iThi",
   confirmEmailLink: "/",
 } as emailConfirmationTemplateProps;
 

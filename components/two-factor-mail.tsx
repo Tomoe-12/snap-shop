@@ -21,7 +21,7 @@ const MagicCodeEmail = ({ code }: MagicCodeEmail) => {
       <Preview>Sign in to SnapShop</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Text style={company}>Snap Shop </Text>
+          <Text style={company}>iThi </Text>
           <Heading style={codeTitle}>Your authentication code</Heading>
           <Text style={codeDescription}>
             Enter it in the OTP and press the verify button. This code will
