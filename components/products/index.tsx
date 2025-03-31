@@ -7,7 +7,7 @@ import React from "react";
 type ProductsProps = {
   productsWithVariants: VariantsWithProduct[];
 };
-const Products = ({ productsWithVariants }: ProductsProps) => {
+const   Products = ({ productsWithVariants }: ProductsProps) => {
   console.log("productsWithVariants", productsWithVariants);
 
   return (
