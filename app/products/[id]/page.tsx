@@ -1,3 +1,4 @@
+import ImageSlider from "@/components/products/image-slider";
 import VariantPicker from "@/components/products/variant-picker";
 import formatCurrency from "@/lib/formatCurrency";
 import { db } from "@/server";
@@ -48,16 +49,19 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
   return (
     <main>
       {productsWithVariants && (
-        <main>
-          <div></div>
-          <div>
+        <main className="flex md:gap-10 gap-4 mt-10 items-center  ">
+          <div className="flex-1">
+            <ImageSlider variants={productsWithVariants.product.productVariants} />
+          </div>
+          <div className="flex-1 items-center ">
             <h2 className="font-bold text-2xl ">
               {productsWithVariants.product.title}
             </h2>
+            <hr className="my-2" />
             <p className=" text-xs bg-gray-200 font-medium w-fit p-1 my-2 rounded-md  ">
               {productsWithVariants.productType} Variant
             </p>
-            <div
+            <div className="leading-8"
               dangerouslySetInnerHTML={{
                 __html: productsWithVariants.product.description,
               }}

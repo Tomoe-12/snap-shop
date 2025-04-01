@@ -45,7 +45,7 @@ const VariantPicker = ({
             }}
             style={{ backgroundColor: color }}
             className={cn(
-              "w-7 h-7 rounded-full cursor-pointer ",
+              "md:w-7 md:h-7 w-5 h-5 rounded-full cursor-pointer ",
               selectedVariantColor === productType
                 ? "opacity-100"
                 : "opacity-35"
