@@ -1,4 +1,4 @@
-"client";
+"use client";
 
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -43,14 +43,16 @@ const VariantPicker = ({
                 { scroll: true }
               );
             }}
-            style={{ backgroundImage: color }}
+            style={{ backgroundColor: color }}
             className={cn(
-              "w-5 h-5 rounded-full cursor-pointer",
+              "w-7 h-7 rounded-full cursor-pointer ",
               selectedVariantColor === productType
                 ? "opacity-100"
                 : "opacity-35"
             )}
-          ></div>
+          >
+            
+          </div>
         </TooltipTrigger>
         <TooltipContent>{productType}</TooltipContent>
       </Tooltip>
