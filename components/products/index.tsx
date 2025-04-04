@@ -14,7 +14,7 @@ const   Products = ({ productsWithVariants }: ProductsProps) => {
     <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {productsWithVariants.map((product) => (
         <Link
-          href={`/products/${product.id}?productId=${product.product.id}&type=${product.productType}&image=${product.variantImages[0].image_url}&title=${product.product.title}&price=${product.product.price} `}
+          href={`/products/${product.id}?vid=${product.id}&productId=${product.product.id}&type=${product.productType}&image=${product.variantImages[0].image_url}&title=${product.product.title}&price=${product.product.price} `}
           key={product.id}
           className="bg-white p-4 rounded-md shadow-md"
         >
