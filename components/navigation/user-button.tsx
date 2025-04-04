@@ -25,7 +25,7 @@ const Userbutton = ({ user, expires }: Session) => {
         //   Logout
         // </Button>
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger className="ring-0 border-2 border-primary rounded-full" >
+          <DropdownMenuTrigger className="ring-0 border-2 border-primary rounded-full">
             <Avatar>
               <AvatarImage src={user?.image!} />
               <AvatarFallback className="bg-primary text-white font-semibold">
@@ -56,7 +56,7 @@ const Userbutton = ({ user, expires }: Session) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer group hover:bg-primary/10"
-              onClick={() => router.push('/dashboard/settings')}
+              onClick={() => router.push("/dashboard/settings")}
             >
               <Settings
                 size={16}
@@ -79,11 +79,13 @@ const Userbutton = ({ user, expires }: Session) => {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Button asChild>
-          <Link href={"/auth/login"} className="space-x-4">
-            <LogIn size={16} /> Login
-          </Link>
-        </Button>
+        <>
+          <Button asChild>
+            <Link href={"/auth/login"} className="space-x-4">
+              <LogIn size={16} /> Login
+            </Link>
+          </Button>
+        </>
       )}
     </div>
   );
