@@ -19,7 +19,10 @@ import { Minus, Plus } from "lucide-react";
 import { totalPriceCale } from "@/lib/total-price";
 
 const CartItem = () => {
-  const { cart, removeFromCart, addToCart } = useCartStore((state) => state);
+  const  cart  = useCartStore((state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const setCartPosition = useCartStore((state) => state.setCartPosition);
 
   return (
     <div className="lg:w-1/2  mb-10 mx-auto">
@@ -103,7 +106,7 @@ const CartItem = () => {
               </TableRow>
             </TableFooter>
           </Table>
-          <Button size={"lg"} className="w-full mt-5 ">
+          <Button size={"lg"} className="w-full mt-5 " onClick={()=> setCartPosition("Checkout") } >
             Place Order
           </Button>
         </div>

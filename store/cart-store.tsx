@@ -16,6 +16,8 @@ export type CartType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
+  cartPosition: "Order" | "Checkout" | "Success";
+  setCartPosition: (position: "Order" | "Checkout" | "Success") => void;
 };
 
 export const useCartStore = create(
@@ -75,6 +77,9 @@ export const useCartStore = create(
             cart: updatedCart.filter((cItem) => cItem.variant.quantity > 0),
           };
         }),
+      cartPosition: "Order",
+      setCartPosition: (position) =>
+        set((state) => ({ cartPosition: position })),
     }),
     {
       name: "cart-storage",
