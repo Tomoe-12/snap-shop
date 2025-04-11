@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PaymentElement,
   useElements,
@@ -16,10 +16,13 @@ type paymentFormProps = {
 const PaymentForm = ({ totalPrice }: paymentFormProps) => {
   const cart = useCartStore((state) => state.cart);
   const setCartPosition = useCartStore((state) => state.setCartPosition);
+  const clearCart = useCartStore((state) => state.clearCart);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const stripe = useStripe();
   const elements = useElements();
+
+
 
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +49,7 @@ const PaymentForm = ({ totalPrice }: paymentFormProps) => {
         image_url: ci.image,
       })),
     });
-    
+
     if (res?.data?.error) {
       setErrorMsg(res.data.error);
       setLoading(false);
@@ -55,7 +58,7 @@ const PaymentForm = ({ totalPrice }: paymentFormProps) => {
       const paymentResponse = await stripe.confirmPayment({
         elements,
         clientSecret: res.data.sucess.clientSecretId!,
-        // redirect  :"if_required" ,
+        redirect: "if_required",
         confirmParams: {
           return_url: "http://localhost:3000/success",
           receipt_email: res.data.sucess.user_email!,
@@ -68,7 +71,8 @@ const PaymentForm = ({ totalPrice }: paymentFormProps) => {
         return;
       } else {
         setLoading(false);
-        setCartPosition('Success')
+        clearCart();
+        setCartPosition("Success");
       }
     }
   };
