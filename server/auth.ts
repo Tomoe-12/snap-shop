@@ -8,6 +8,7 @@ import { loginSchema } from "@/types/login-schema";
 import { db } from ".";
 import { accounts, users } from "./schema";
 import { eq } from "drizzle-orm";
+import Stripe from "stripe";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db) as any,
   secret: process.env.AUTH_SECRET!,
@@ -93,4 +94,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  events: {
+    createUser: async ({ user }) => {
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: "2025-03-31.basil",
+      });
+      const customer = await stripe.customers.create({
+        email: user.email!,
+        name: user.name!,
+      });
+      await db
+        .update(users)
+        .set({
+          customerId: customer.id,
+        })
+        .where(eq(users.id, user.id!));
+    },
+  },
 });

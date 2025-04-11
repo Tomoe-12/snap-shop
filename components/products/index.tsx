@@ -30,7 +30,7 @@ const   Products = ({ productsWithVariants }: ProductsProps) => {
           </h3>
           <p>{product.product.description}</p>
           <p className="font-medium text-sm mt-1">
-            {formatCurrency(product.product.price)} MMK
+            {formatCurrency(product.product.price)} USD
           </p>
         </Link>
       ))}

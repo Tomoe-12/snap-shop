@@ -142,9 +142,9 @@ const CreateProductForm = () => {
                         className="p-2 bg-muted rounded-md"
                       />
                       <Input
-                        placeholder="Price must show in MMK"
+                        placeholder="Price must show in USD"
                         {...field}
-                        step={100}
+                        // step={100}
                         min={0}
                         type="number"
                       />
