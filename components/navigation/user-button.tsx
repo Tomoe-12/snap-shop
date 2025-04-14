@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 const Userbutton = ({ user, expires }: Session) => {
   const router = useRouter();
-  console.log(user);
+  // console.log(user);
 
   return (
     <div>
@@ -47,7 +47,7 @@ const Userbutton = ({ user, expires }: Session) => {
               </div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer group hover:bg-primary/10">
+            <DropdownMenuItem className="cursor-pointer group hover:bg-primary/10" onClick={()=> router.push('/dashboard/orders')} >
               <Truck
                 size={16}
                 className="group-hover:translate-x-1 group-hover:text-primary transition-all duration-300 ease-in-out"

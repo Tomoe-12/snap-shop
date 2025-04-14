@@ -25,7 +25,7 @@ const CartItem = () => {
   const setCartPosition = useCartStore((state) => state.setCartPosition);
 
   return (
-    <div className="lg:w-1/2  mb-10 mx-auto">
+    <div className="lg:w-1/2 max-w-4xl  mb-10 mx-auto">
       {cart.length === 0 ? (
         <p className="text-center">Your Cart is Empty!</p>
       ) : (
