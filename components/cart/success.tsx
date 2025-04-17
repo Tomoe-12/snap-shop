@@ -17,7 +17,7 @@ const Success = () => {
       setTimeout(() => {
         setCartPosition("Order");
         clearCart();
-      }, 10000);
+      }, 6000);
     
   }, []);
   return (
