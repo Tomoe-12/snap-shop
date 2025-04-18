@@ -1,18 +1,43 @@
+"use client";
 import formatCurrency from "@/lib/formatCurrency";
-import { VariantsWithProduct } from "@/lib/infer-type";
+import { ProductsWithVariants, VariantsWithProduct } from "@/lib/infer-type";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
   productsWithVariants: VariantsWithProduct[];
 };
-const   Products = ({ productsWithVariants }: ProductsProps) => {
-  console.log("productsWithVariants", productsWithVariants);
+const Products = ({ productsWithVariants }: ProductsProps) => {
+  const params = useSearchParams();
+  const tagParams = params.get("tag") || "all";
+
+  const [filteredProducts, setFilteredProducts] = useState<
+    VariantsWithProduct[]
+  >([]);
+
+  // useEffect(() => {
+  //   const filteredItem = productsWithVariants.filter(
+  //     (product) => product.variantTags[0].tag.toLowerCase() === tagParams
+  //   );
+  //   setFilteredProducts(filteredItem);
+  // }, [tagParams]);
+  useEffect(() => {
+    if (tagParams === "all") {
+      setFilteredProducts(productsWithVariants);
+    } else {
+      const filteredItem = productsWithVariants.filter(
+        (product) => product.variantTags[0].tag.toLowerCase() === tagParams
+      );
+      setFilteredProducts(filteredItem);
+    }
+  }, [tagParams, productsWithVariants]);
+  
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {productsWithVariants.map((product) => (
+      {filteredProducts.map((product) => (
         <Link
           href={`/products/${product.id}?vid=${product.id}&productId=${product.product.id}&type=${product.productType}&image=${product.variantImages[0].image_url}&title=${product.product.title}&price=${product.product.price} `}
           key={product.id}
