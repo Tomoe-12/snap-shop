@@ -51,9 +51,9 @@ const Products = ({ productsWithVariants }: ProductsProps) => {
           />
           <hr className="my-2" />
           <h3 className="font-semibold  ">
-            {product.product.title.substring(0, 25)}
+            {product.product.title.substring(0, 25)}......
           </h3>
-          <p>{product.product.description}</p>
+          {/* <p>{product.product.description}</p> */}
           <p className="font-medium text-sm mt-1">
             {formatCurrency(product.product.price)} USD
           </p>
