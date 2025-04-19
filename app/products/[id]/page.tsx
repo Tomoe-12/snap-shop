@@ -11,6 +11,7 @@ type SingleProductProps = {
   params: {
     id: string;
   };
+  searchParams? :{[key : string] :string | string}
 };
 
 //  improve user experience by using static params should used it 
