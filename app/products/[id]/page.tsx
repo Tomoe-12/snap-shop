@@ -7,36 +7,32 @@ import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
 import React from "react";
 
-type SingleProductProps = {
-  params: {
-    id: string;
-  };
-  searchParams? :{[key : string] :string | string}
-};
-
-//  improve user experience by using static params should used it 
+type Props = {
+  params : Promise<{id : string}>
+}
 export async function generateStaticParams() {
   const data = await db.query.productVariants.findMany({
-    with : {
-      variantImages : true ,
-      variantTags : true ,
-      product : true ,
-    }
-  })
-  if(data){
+    with: {
+      variantImages: true,
+      variantTags: true,
+      product: true,
+    },
+  });
+  if (data) {
     const idArr = data.map((d) => ({
-      id : d.id.toString()
-    }))
+      id: d.id.toString(),
+    }));
     return idArr;
   }
-  return []
+  return [];
 }
 
-const SingleProduct = async ({ params }: SingleProductProps) => {
-  const productId = Number(params.id); // convert to number
+const SingleProduct = async ({ params }: Props) => {
+  const {id } = await params
+  const productId = Number(id); // convert to number
 
   const productsWithVariants = await db.query.productVariants.findFirst({
-    where: eq(productVariants.id,productId),
+    where: eq(productVariants.id, productId),
     with: {
       product: {
         with: {
@@ -55,7 +51,9 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
       {productsWithVariants && (
         <main className="flex flex-col lg:flex-row md:gap-10 gap-4 mt-10  pb-6">
           <div className="lg:flex-1">
-            <ImageSlider variants={productsWithVariants.product.productVariants} />
+            <ImageSlider
+              variants={productsWithVariants.product.productVariants}
+            />
           </div>
           <div className="lg:flex-1 items-center ">
             <h2 className="font-bold text-2xl ">
@@ -65,7 +63,8 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
             <p className=" text-xs bg-gray-200 font-medium w-fit p-1 my-2 rounded-md  ">
               {productsWithVariants.productType} Variant
             </p>
-            <div className="leading-8"
+            <div
+              className="leading-8"
               dangerouslySetInnerHTML={{
                 __html: productsWithVariants.product.description,
               }}
@@ -86,7 +85,7 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
                 />
               ))}
             </div>
-            <AddToCart/>
+            <AddToCart />
           </div>
         </main>
       )}

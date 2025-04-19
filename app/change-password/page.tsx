@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/types/register-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { register } from "@/server/actions/register-action";
@@ -26,6 +26,7 @@ import { changePasswordSchema } from "@/types/change-password-schema";
 import { changePassword } from "@/server/actions/change-password";
 import { signOut } from "next-auth/react";
 const ChangePassword = () => {
+  const [token,setToken] = useState<string | null>(null);
   const form = useForm<z.infer<typeof changePasswordSchema>>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -33,8 +34,13 @@ const ChangePassword = () => {
     },
   });
 
-  const searchParam = useSearchParams();
-  const token = searchParam.get("token");
+  useEffect(()=>{
+    const searchParam = new URLSearchParams(window.location.search);
+    setToken(searchParam.get("token"));
+  })
+
+  // const searchParam = useSearchParams();
+  // const token = searchParam.get("token");
 
   const { execute, status, result } = useAction(changePassword, {
     onSuccess({ data }) {
@@ -56,6 +62,10 @@ const ChangePassword = () => {
       token,
     });
   };
+
+  if(!token){
+    return <div>loading....</div>
+  }
 
   return (
     <div>
