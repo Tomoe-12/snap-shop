@@ -9,7 +9,7 @@ import React from "react";
 
 type SingleProductProps = {
   params: {
-    id: number;
+    id: string;
   };
 };
 
@@ -32,8 +32,10 @@ export async function generateStaticParams() {
 }
 
 const SingleProduct = async ({ params }: SingleProductProps) => {
+  const productId = Number(params.id); // convert to number
+
   const productsWithVariants = await db.query.productVariants.findFirst({
-    where: eq(productVariants.id, params.id),
+    where: eq(productVariants.id,productId),
     with: {
       product: {
         with: {
