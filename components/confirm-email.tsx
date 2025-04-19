@@ -7,10 +7,17 @@ import AuthForm from "./auth/auth-form";
 import { cn } from "@/lib/utils";
 
 const ConfirmEmail = () => {
-  const token = useSearchParams().get("token");
+  // const token = useSearchParams().get("token");
+  const [token,setToken] = useState<string | null>(null);
   const router = useRouter();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+   // Only get the token on the client side after the component has mounted
+   useEffect(() => {
+    const tokenFromUrl = new URLSearchParams(window.location.search).get("token");
+    setToken(tokenFromUrl);
+  }, []);
 
   const handleConfirmEmail = useCallback(() => {
     if (!token) {
@@ -29,8 +36,10 @@ const ConfirmEmail = () => {
   }, []);
 
   useEffect(() => {
+   if(token){
     handleConfirmEmail();
-  }, []);
+   }
+  }, [token,handleConfirmEmail ]);
 
   return (
     <AuthForm
