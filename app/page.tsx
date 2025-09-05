@@ -16,7 +16,7 @@ export default async function Home() {
     orderBy: (productVariants, { desc }) => [desc(productVariants.id)],
   });
 
-  console.log("productsWithVariants", productsWithVariants);
+  // console.log("productsWithVariants", productsWithVariants);
   
   return (
    <main>
