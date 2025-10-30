@@ -19,7 +19,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -30,20 +29,8 @@ import { redirect } from "next/navigation";
 import { db } from "@/server";
 import { desc, eq } from "drizzle-orm";
 import { orders } from "@/server/schema";
-import { format } from "path";
 import formatCurrency from "@/lib/formatCurrency";
 import Image from "next/image";
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
 import AdminActions from "@/components/order/Admin Actions";
 
 type Status = "PENDING" | "COMPLETED" | "CANCELLED";
@@ -55,9 +42,7 @@ const Orders = async () => {
 
   const userOrders = await db.query.orders.findMany({
     where: eq(orders.userID, session?.user.id as string),
-    orderBy :[
-      desc(orders.createdAt)
-    ],
+    orderBy: [desc(orders.createdAt)],
     with: {
       orderProduct: {
         with: {
@@ -114,7 +99,23 @@ const Orders = async () => {
                       </span>
                     )}
                   </TableCell>
-                  <TableCell>{order.createdAt?.toString()}</TableCell>
+                  <TableCell>
+                    {order.createdAt
+                      ? // Date
+                        order.createdAt.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }) +
+                        " " +
+                        // Time (12-hour format)
+                        order.createdAt.toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true, // AM/PM ဖြင့်ပြသရန်
+                        })
+                      : "N/A"}
+                  </TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
 
                   <TableCell>
@@ -190,7 +191,10 @@ const Orders = async () => {
                   </TableCell>
                   {session.user.role.toUpperCase() === "ADMIN" && (
                     <TableCell>
-                      <AdminActions orderId={order.id.toString()} currentStatus={order.status as Status} />
+                      <AdminActions
+                        orderId={order.id.toString()}
+                        currentStatus={order.status as Status}
+                      />
                     </TableCell>
                   )}
                 </TableRow>
