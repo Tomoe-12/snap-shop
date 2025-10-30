@@ -48,7 +48,7 @@ export const weeklyAnalytics = async () => {
           // .select({ created: orders.created })
           .select({ count: orders.id })
           .from(orders)
-          .where(between(orders.created, startDay, endDay));
+          .where(between(orders.createdAt, startDay, endDay));
 
         return { day, count: orderData.length };
       })

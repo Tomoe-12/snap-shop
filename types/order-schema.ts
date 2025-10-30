@@ -10,3 +10,8 @@ export const createOrderSchema = z.object({
         variantId : z.number(),
     }))
 })
+
+export const changeOrderStatusSchema = z.object({
+    orderId : z.number(),
+    status : z.enum(['PENDING', 'COMPLETED', 'CANCELLED']),
+})

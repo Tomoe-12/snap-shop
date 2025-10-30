@@ -1,10 +1,15 @@
-'use server'
+"use server";
 import { orderProduct } from "./../schema";
-import { createOrderSchema } from "@/types/order-schema";
+import {
+  changeOrderStatusSchema,
+  createOrderSchema,
+} from "@/types/order-schema";
 import { actionClient } from "./safe-action";
 import { auth } from "../auth";
 import { db } from "..";
 import { orders } from "../schema";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export const createOrder = actionClient
   .schema(createOrderSchema)
@@ -16,9 +21,9 @@ export const createOrder = actionClient
       .insert(orders)
       .values({
         userID: session.user.id as string,
-        status ,
+        status,
         total: totalPrice,
-      })    
+      })
       .returning();
 
     products.map(async ({ productId, quantity, variantId }) => {
@@ -30,4 +35,29 @@ export const createOrder = actionClient
       });
     });
     return { success: "Order added" };
+  });
+
+export const changeOrderStatus = actionClient
+  .schema(changeOrderStatusSchema)
+  .action(async ({ parsedInput: { orderId, status } }) => {
+    const session = await auth();
+    if (!session) return { error: "You need to be logged in" };
+    try {
+      if (orderId) {
+        const existingProduct = await db.query.orders.findFirst({
+          where: eq(orders.id, orderId),
+        });
+        if (!existingProduct) return { error: "Order not found!" };
+        await db.update(orders).set({ status }).where(eq(orders.id, orderId));
+
+        revalidatePath("/dashboard/orders");
+
+        return { success: `Order status updated successfully.` };
+      }
+    } catch (error) {
+      console.log(error);
+      return { error: "Sth went wrong" };
+    }
+
+    return { success: "Order status change initiated" };
   });

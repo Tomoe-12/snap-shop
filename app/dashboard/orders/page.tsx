@@ -28,18 +28,36 @@ import {
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { orders } from "@/server/schema";
 import { format } from "path";
 import formatCurrency from "@/lib/formatCurrency";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
+import { Button } from "@/components/ui/button";
+import AdminActions from "@/components/order/Admin Actions";
+
+type Status = "PENDING" | "COMPLETED" | "CANCELLED";
 
 const Orders = async () => {
   const session = await auth();
   if (!session?.user) return redirect("/");
+  console.log("session", session.user.role);
 
   const userOrders = await db.query.orders.findMany({
     where: eq(orders.userID, session?.user.id as string),
+    orderBy :[
+      desc(orders.createdAt)
+    ],
     with: {
       orderProduct: {
         with: {
@@ -65,11 +83,14 @@ const Orders = async () => {
             <TableCaption>A list of your orders.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="min-w-[30px] w-[100px">ID</TableHead>
+                <TableHead className="min-w-[30px] ">ID</TableHead>
                 <TableHead className="min-w-24 ">Status</TableHead>
                 <TableHead className="min-w-36">Orders On</TableHead>
                 <TableHead className="min-w-28">Total</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>Details</TableHead>
+                {session.user.role.toUpperCase() === "ADMIN" && (
+                  <TableHead>Admin Actions</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -93,14 +114,15 @@ const Orders = async () => {
                       </span>
                     )}
                   </TableCell>
-                  <TableCell>{order.created?.toString()}</TableCell>
+                  <TableCell>{order.createdAt?.toString()}</TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
+
                   <TableCell>
-                    <Dialog >
+                    <Dialog>
                       <DialogTrigger className="underline">
                         View Details
                       </DialogTrigger>
-                      <DialogContent className='max-w-3xl rounded-xl'  >
+                      <DialogContent className="max-w-3xl rounded-xl">
                         <DialogHeader>
                           <DialogTitle>Orders Details # {order.id}</DialogTitle>
                           {/* <DialogDescription>
@@ -155,15 +177,22 @@ const Orders = async () => {
                             ))}
                           </TableBody>
                           <TableFooter>
-                            <TableRow className="bg-gray-300 hover:bg-gray-300"  >
-                              <TableCell colSpan={5} >Total</TableCell>
-                              <TableCell className="text-right">{formatCurrency(order.total)}</TableCell>
+                            <TableRow className="bg-gray-300 hover:bg-gray-300">
+                              <TableCell colSpan={5}>Total</TableCell>
+                              <TableCell className="text-right">
+                                {formatCurrency(order.total)}
+                              </TableCell>
                             </TableRow>
                           </TableFooter>
                         </Table>
                       </DialogContent>
                     </Dialog>
                   </TableCell>
+                  {session.user.role.toUpperCase() === "ADMIN" && (
+                    <TableCell>
+                      <AdminActions orderId={order.id.toString()} currentStatus={order.status as Status} />
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

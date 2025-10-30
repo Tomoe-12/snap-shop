@@ -25,7 +25,7 @@ export const users = pgTable("user", {
   image: text("image"),
   isTowFactorEnable: boolean("isTowFactorEnable").default(false),
   role: RoleEnum("roles").default("user"),
-  customerId : text("customerId"),
+  customerId: text("customerId"),
 });
 
 export const twoFactorToken = pgTable(
@@ -185,12 +185,17 @@ export const userRelations = relations(users, ({ many }) => ({
 
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
-   userID: text("userID")
+  userID: text("userID")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   total: real("total").notNull(),
   status: text("status").notNull(),
-  created: timestamp("created").defaultNow(),
+  // created: timestamp("created").defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
   receiptURL: text("receiptURL"),
 });
 
@@ -205,7 +210,9 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
 
 export const orderProduct = pgTable("orderProduct", {
   id: serial("id").primaryKey(),
-  orderID : serial("orderID").notNull().references(()=> orders.id,{onDelete:'cascade'}),
+  orderID: serial("orderID")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
   quantity: integer("quantity").notNull(),
   productVariantID: serial("productVariantID")
     .notNull()
@@ -231,4 +238,4 @@ export const orderProductRelations = relations(orderProduct, ({ one }) => ({
     references: [productVariants.id],
     relationName: "productVariants",
   }),
-}))
+}));
