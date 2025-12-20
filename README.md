@@ -84,6 +84,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 - `public/` - Static assets like images and fonts
 - `styles/` or `app/globals.css` - Global styles with Tailwind CSS
 
+## For Students
+
+Are you a student looking to use GitHub Copilot for free? Check out our comprehensive guide on how to get GitHub Copilot with a student plan:
+
+📚 [GitHub Copilot Student Plan Guide](./GITHUB_COPILOT_STUDENT.md)
+
+This guide covers:
+- Eligibility requirements
+- Required documentation and proof
+- Step-by-step application process
+- Benefits and activation instructions
+- Troubleshooting tips
+
 ## Contributing
 
 Contributions are welcome! Please open issues or submit pull requests for improvements and bug fixes.
