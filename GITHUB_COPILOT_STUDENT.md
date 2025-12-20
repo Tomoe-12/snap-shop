@@ -2,7 +2,7 @@
 
 ## Overview
 
-GitHub Copilot is available for free to verified students through the GitHub Student Developer Pack. This guide provides information on what you need to apply for and verify your student status to access GitHub Copilot.
+GitHub Copilot is available for free to verified students through the GitHub Student Developer Pack. This unofficial guide provides information on what you need to apply for and verify your student status to access GitHub Copilot. Access is typically granted for the duration of your studies (until your stated graduation date).
 
 ## Eligibility Requirements
 
@@ -41,7 +41,7 @@ If you don't have a school-issued email address, you can upload documentation:
   - Current enrollment dates
 
 **Document Requirements:**
-- Must be dated within the last 3 months
+- Must be dated within the last 3 months (this timeframe may vary based on institutional or GitHub policies)
 - Should clearly show your name and the institution's name
 - Must be in a clear, readable format (PDF, JPG, PNG)
 - Should include official letterhead or institutional stamps/seals when possible
@@ -79,7 +79,7 @@ Choose one of the verification methods:
 
 ### Step 4: Wait for Approval
 
-- **Processing time**: Usually 1-7 business days
+- **Processing time**: Typically takes several business days
 - **Notification**: You'll receive an email when approved
 - **Status check**: Visit [GitHub Education](https://education.github.com/discount_requests/application) to check status
 
@@ -90,7 +90,7 @@ Once approved, you get:
 - **Free GitHub Copilot access** - AI pair programmer
 - **GitHub Pro** - Includes unlimited private repositories
 - **Access to GitHub Codespaces** - Cloud-based development environment
-- **Free access to developer tools** - Over 100+ partner tools and services
+- **Free access to developer tools** - Many partner tools and services (see the [GitHub Education Pack](https://education.github.com/pack) for current offerings)
 
 ## Activating GitHub Copilot
 
@@ -98,11 +98,7 @@ After your student status is verified:
 
 1. Go to [GitHub Copilot settings](https://github.com/settings/copilot)
 2. Enable GitHub Copilot for your account
-3. Install the GitHub Copilot extension in your IDE:
-   - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot)
-   - [Visual Studio](https://marketplace.visualstudio.com/items?itemName=GitHub.copilotvs)
-   - [JetBrains IDEs](https://plugins.jetbrains.com/plugin/17718-github-copilot)
-   - [Neovim](https://github.com/github/copilot.vim)
+3. Install the GitHub Copilot extension in your IDE - Visit the [official installation guide](https://docs.github.com/en/copilot/using-github-copilot/getting-started-with-github-copilot) for your specific editor (Visual Studio Code, Visual Studio, JetBrains IDEs, Neovim, etc.)
 
 ## Troubleshooting
 
