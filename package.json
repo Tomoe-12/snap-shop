@@ -33,7 +33,7 @@
     "@tiptap/react": "^2.10.4",
     "@tiptap/starter-kit": "^2.10.4",
     "@uploadthing/react": "^7.1.5",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
